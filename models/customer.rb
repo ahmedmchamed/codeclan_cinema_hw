@@ -1,6 +1,7 @@
 require('pry')
 require_relative('../db/sql_runner')
 require_relative('./film')
+require_relative('./ticket')
 
 class Customer
 
@@ -40,6 +41,15 @@ class Customer
         ticket_price_result = SqlRunner.run(ticket_price_sql, values)[0]['price'].to_i()
         return remaining_customer_funds = @funds - ticket_price_result
     end
+
+	def number_of_tickets_purchased()
+		sql = "SELECT tickets.* FROM tickets
+		WHERE tickets.customer_id = $1"
+		values = [@id]
+		tickets_hash_result = SqlRunner.run(sql, values)
+		tickets_array = Ticket.map_data(tickets_hash_result)
+		return tickets_array.size()
+	end
 
 	def self.delete_all()
 	    sql = "DELETE FROM customers;"

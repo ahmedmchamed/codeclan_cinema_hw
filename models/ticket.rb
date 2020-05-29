@@ -23,4 +23,8 @@ class Ticket
         SqlRunner.run(sql)
     end
 
+	def self.map_data(tickets_hash_result)
+		return tickets_hash_result.map { |ticket| Ticket.new(ticket) }
+	end
+
 end
