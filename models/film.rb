@@ -30,6 +30,13 @@ class Film
         return Customer.map_customer_data(customer_hash_data)
     end
 
+	def number_of_customers()
+			sql = "SELECT tickets.* FROM tickets
+			WHERE tickets.film_id = $1"
+			values = [@id]
+			##############
+	end
+
     def self.delete_all()
         sql = "DELETE FROM films;"
         SqlRunner.run(sql)
