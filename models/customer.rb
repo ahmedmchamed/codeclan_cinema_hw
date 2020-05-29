@@ -15,8 +15,7 @@ class Customer
 	def save()
 		sql = "INSERT INTO customers
 		(name, funds) VALUES
-		($1, $2)
-		RETURNING id;"
+		($1, $2) RETURNING id;"
 		values = [@name, @funds]
 		@id = SqlRunner.run(sql, values)[0]['id'].to_i()
     end
@@ -28,13 +27,17 @@ class Customer
         WHERE tickets.customer_id = $1"
         values = [@id]
         film_hash_data = SqlRunner.run(sql, values)
-        return Film.map_data(film_hash_data)
+        return Film.map_film_data(film_hash_data)
     end
 
 	def self.delete_all()
 	    sql = "DELETE FROM customers;"
 	 	SqlRunner.run(sql)
-	end
+    end
+    
+    def self.map_customer_data(customer_hash_data)
+        return customer_hash_data.map { |customer| Customer.new(customer) }
+    end
 
 end
 
