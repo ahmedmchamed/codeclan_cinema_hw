@@ -11,14 +11,14 @@ customer1 = Customer.new({
 	'funds' => 100
 })
 
-
+customer1.save() 
 
 film1 = Film.new({
     'title' => 'Men in Black',
     'price' => 25
 })
 
-customer1.save() 
+
 film1.save()
 
 ticket1 = Ticket.new({
