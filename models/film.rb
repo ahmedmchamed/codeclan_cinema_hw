@@ -21,6 +21,14 @@ class Film
         @id = SqlRunner.run(sql, values)[0]['id'].to_i()
     end
 
+	def update_film()
+		sql = "UPDATE films SET
+		(title, price) = ($1, $2)
+		WHERE id = $3;"
+		values = [@title, @price, @id]
+		SqlRunner.run(sql, values)
+	end
+
     def customers_seeing_film()
         sql = "SELECT customers.* FROM customers
         INNER JOIN tickets ON
@@ -56,6 +64,12 @@ class Film
 		films_array = self.map_film_data(films_hash_result)
 		sorted_films = films_array.sort_by { |film| film.number_of_tickets() }
 		return sorted_films.uniq { |film| film.number_of_tickets() }
+	end
+
+	def self.all()
+		sql = "SELECT * FROM films;"
+		films_hash_result = SqlRunner.run(sql)
+		return self.map_film_data(films_hash_result)
 	end
 
     def self.delete_all()

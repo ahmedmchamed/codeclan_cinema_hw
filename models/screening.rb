@@ -1,9 +1,10 @@
+require('time')
 require_relative('../db/sql_runner')
 
 class Screening
 	
-	attr_accessor :film_time
-	attr_reader :id, :film_id
+	attr_accessor :film_time, :available_tickets
+	attr_reader :id, :film_id, :customer_id
 
 	def initialize(options)
 		@id = options['id'].to_i() if options['id']
