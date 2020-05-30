@@ -28,7 +28,7 @@ class Customer
 		SqlRunner.run(sql, values)
 	end
     
-    def films()
+    def films_customer_seeing()
         sql = "SELECT films.* FROM films
         INNER JOIN tickets ON
         tickets.film_id = films.id
@@ -38,14 +38,18 @@ class Customer
         return Film.map_film_data(film_hash_data)
     end
 
-    def remaining_funds()
+    def remaining_funds_after_purchase()
         ticket_price_sql = "SELECT films.price FROM films
         INNER JOIN tickets ON
         tickets.film_id = films.id
         WHERE tickets.customer_id = $1;"
         values = [@id]
-        ticket_price_result = SqlRunner.run(ticket_price_sql, values)[0]['price'].to_i()
-        return remaining_customer_funds = @funds - ticket_price_result
+		total_price_hash_result = SqlRunner.run(ticket_price_sql, values)
+		#loop through all films in case customer purchases more than one ticket
+		total_price = total_price_hash_result.reduce(0) { |total_purchased_price, film| 
+				total_purchased_price + film['price'].to_i() 
+		} 
+        return remaining_customer_funds = @funds - total_price
     end
 
 	def number_of_tickets_purchased()
