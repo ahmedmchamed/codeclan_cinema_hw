@@ -21,7 +21,7 @@ class Film
         @id = SqlRunner.run(sql, values)[0]['id'].to_i()
     end
 
-    def customers()
+    def customers_seeing_film()
         sql = "SELECT customers.* FROM customers
         INNER JOIN tickets ON
         tickets.customer_id = customers.id
@@ -31,13 +31,31 @@ class Film
         return Customer.map_customer_data(customer_hash_data)
     end
 
-	def number_of_customers()
-			sql = "SELECT tickets.* FROM tickets
-			WHERE tickets.film_id = $1"
-			values = [@id]
-			ticket_hash_result = SqlRunner.run(sql, values)
-			number_of_customers_array = Ticket.map_data(ticket_hash_result)
-			return number_of_customers_array.size()
+	def film_time()
+		sql = "SELECT screenings.film_time FROM screenings
+		WHERE screenings.film_id = $1"
+		values = [@id]
+		time_result = SqlRunner.run(sql, values)[0]['film_time']
+		return time_result 
+	end
+
+	def number_of_tickets()
+		sql = "SELECT tickets.* FROM tickets
+		WHERE tickets.film_id = $1"
+		values = [@id]
+		ticket_hash_result = SqlRunner.run(sql, values)
+		number_of_tickets_array = Ticket.map_data(ticket_hash_result)
+		return number_of_tickets_array.size()
+	end
+
+	def self.most_popular_film()
+		sql = "SELECT films.* FROM films
+		INNER JOIN tickets ON
+		tickets.film_id = films.id;"
+		films_hash_result = SqlRunner.run(sql)
+		films_array = self.map_film_data(films_hash_result)
+		sorted_films = films_array.sort_by { |film| film.number_of_tickets() }
+		return sorted_films.uniq { |film| film.number_of_tickets() }
 	end
 
     def self.delete_all()
