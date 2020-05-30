@@ -55,8 +55,17 @@ class Film
 		number_of_tickets_array = Ticket.map_data(ticket_hash_result)
 		return number_of_tickets_array.size()
 	end
+	
+	def best_screening_time()
+		sql = "SELECT tickets.* FROM tickets
+		WHERE tickets.film_id = $1;"
+		values = [@id]
+		tickets_hash_result = SqlRunner.run(sql, values)
+		tickets_result = Ticket.map_ticket_data(tickets_hash_result)
+		
+	end
 
-	def self.most_popular_film()
+	def self.most_watched_film()
 		sql = "SELECT films.* FROM films
 		INNER JOIN tickets ON
 		tickets.film_id = films.id;"
