@@ -1,5 +1,6 @@
 require_relative('../db/sql_runner')
 require_relative('./customer')
+require_relative('./ticket')
 
 class Film
 
@@ -34,7 +35,9 @@ class Film
 			sql = "SELECT tickets.* FROM tickets
 			WHERE tickets.film_id = $1"
 			values = [@id]
-			##############
+			ticket_hash_result = SqlRunner.run(sql, values)
+			number_of_customers_array = Ticket.map_data(ticket_hash_result)
+			return number_of_customers_array.size()
 	end
 
     def self.delete_all()
