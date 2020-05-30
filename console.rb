@@ -76,8 +76,20 @@ screening2 = Screening.new({
 	'film_id' => film2.id()
 })
 
+screening3 = Screening.new({
+	'film_time' => '22:00',
+	'film_id' => film1.id()
+})
+
+screening4 = Screening.new({
+	'film_time' => '20:00',
+	'film_id' => film1.id()
+})
+
 screening1.save()
 screening2.save()
+screening3.save()
+screening4.save()
 
 ##################
 ######TICKET######
