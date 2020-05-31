@@ -1,6 +1,5 @@
 require('time')
 require_relative('../db/sql_runner')
-require_relative('./ticket')
 
 class Screening
 	
@@ -27,18 +26,6 @@ class Screening
 		(film_time, available_tickets, film_id) = ($1, $2, $3) WHERE id = $4;"
 		values = [@film_time, @available_tickets, @film_id, @id]
 		SqlRunner.run(sql, values)
-	end
-	
-	def available_seats_remaining()
-		#get the number of tickets purchased for a film
-		sql = "SELECT tickets.* FROM tickets
-		WHERE tickets.film_id = $1"
-		values = [@film_id]
-		tickets_hash_result = SqlRunner.run(sql, values)
-		tickets_array = Ticket.map_ticket_data(tickets_hash_result)
-		remaining_seats = @available_tickets - tickets_array.count()
-		return "No more seats available" if remaining_seats <= 0
-		return remaining_seats
 	end
 
 	def self.all()

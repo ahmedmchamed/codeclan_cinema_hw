@@ -1,7 +1,6 @@
 require_relative('../db/sql_runner')
 require_relative('./customer')
 require_relative('./ticket')
-require_relative('./screening')
 
 class Film
 
@@ -58,20 +57,12 @@ class Film
 	end
 	
 	def best_screening_time()
-		sql = "SELECT tickets.screening_id FROM tickets
+		sql = "SELECT tickets.* FROM tickets
 		WHERE tickets.film_id = $1;"
 		values = [@id]
 		tickets_hash_result = SqlRunner.run(sql, values)
-		tickets_id_result = Ticket.map_ticket_data(tickets_hash_result)
-		#for every screening id key, compound assign number of entries
-		popular_screenings_hash = Hash.new(0)
-		for ticket in tickets_id_result
-			popular_screenings_hash[ticket.screening_id()] += 1
-		end
-		#max_by sort the original tickets_id_result array, against the
-		#count in the popular_screenings_hash with the highest value
-		#id with the highest occurence is returned
-		return tickets_id_result.max_by { |ticket| popular_screenings_hash[ticket.screening_id()] }
+		tickets_result = Ticket.map_ticket_data(tickets_hash_result)
+		
 	end
 
 	def self.most_watched_film()

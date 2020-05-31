@@ -60,14 +60,6 @@ class Customer
 		tickets_array = Ticket.map_data(tickets_hash_result)
 		return tickets_array.size()
 	end
-	
-	def self.find_customer_by_id(id)
-	    sql = "SELECT customers.* FROM customers
-	    WHERE id = $1"
-	    values = [id]
-	    customer_found_result = SqlRunner.run(sql, values)
-	    return self.map_customer_data(customer_found_result)
-	end
 
 	def self.all()
 		sql = "SELECT * FROM customers;"
