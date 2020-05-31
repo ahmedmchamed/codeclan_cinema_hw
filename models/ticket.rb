@@ -34,9 +34,9 @@ class Ticket
 	end
 
 	def self.delete_all()
-        sql = "DELETE FROM tickets;"
-        SqlRunner.run(sql)
-    end
+		sql = "DELETE FROM tickets;"
+		SqlRunner.run(sql)
+	end
 
 	def self.map_ticket_data(tickets_hash_result)
 		return tickets_hash_result.map { |ticket| Ticket.new(ticket) }
