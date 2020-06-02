@@ -74,6 +74,13 @@ class Film
 		return tickets_id_result.max_by { |ticket| popular_screenings_hash[ticket.screening_id()] }
 	end
 
+    def self.find_film_by_id(id)
+      sql = "SELECT films.* FROM films where id = $1"
+      values = [id]
+      films_hash_result = SqlRunner.run(sql, values)
+      return self.map_film_data(films_hash_result)
+    end
+
 	def self.most_watched_film()
 		sql = "SELECT films.* FROM films
 		INNER JOIN tickets ON
